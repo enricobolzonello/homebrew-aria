@@ -6,7 +6,7 @@ class Aria < Formula
   license "Apache-2.0"
 
   def install
-    bin.install "bin/aria"
+    bin.install Dir["bin/*"] if Dir.exist?("bin")
     lib.install Dir["lib/*"] if Dir.exist?("lib")
     (share/"aria").install Dir["share/*"] if Dir.exist?("share")
   end
