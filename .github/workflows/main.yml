@@ -1,0 +1,25 @@
+# gh workflow run release.yml -f version=v0.0.1 -R enricobolzonello/homebrew-aria
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update formula
+        run: |
+          mkdir -p Formula
+
+          VERSION='${{ github.event.inputs.version }}' ./.github/scripts/update-formula
+
+          git config --global user.name 'AriaBot'
+          git config --global user.email 'aria-bot@noreply.github.com'
+          git add Formula/aria.rb
+          git commit -m 'Updated aria to ${{ github.event.inputs.version }}'
+          git push origin master
